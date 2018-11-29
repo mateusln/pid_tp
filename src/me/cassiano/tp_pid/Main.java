@@ -14,7 +14,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("ImageProcessing.fxml"));
 
         primaryStage.setTitle("Trabalho Prático - PID");
-        primaryStage.setScene(new Scene(root, 800, 660));
+        primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
         primaryStage.show();
     }

@@ -100,15 +100,17 @@ public class ImageProcessingController implements Initializable {
 
     private Shape shape;
 
+    private BufferedImage img_convertida;
 
-    @Override
+
+
     public void initialize(URL location, ResourceBundle resources) {
 
         seedShape = Seed.Shape.Circle;
         zoomGroup = new Group();
         zoomGroup.setMouseTransparent(false);
         rootGroup.getChildren().add(zoomGroup);
-        this.imagemPadrao();
+        this.imagemPadrao(); // já abre o programa com uma img carregada p/ acelerar o teste
 
     }
 
@@ -123,6 +125,7 @@ public class ImageProcessingController implements Initializable {
 
         originalImage = new Opener().openImage("/home/mateus/Imagens/lena.jpeg");
         ImageConverter  converter = new ImageConverter(originalImage);
+        img_convertida = originalImage.getBufferedImage();
         converter.convertToGray8();
 
         if (canvas == null) {
@@ -158,6 +161,7 @@ public class ImageProcessingController implements Initializable {
 
             originalImage = new Opener().openImage(file.getPath());
             ImageConverter converter = new ImageConverter(originalImage);
+            img_convertida = originalImage.getBufferedImage();
             converter.convertToGray8();
 
             if (canvas == null) {
@@ -220,7 +224,7 @@ public class ImageProcessingController implements Initializable {
     private void registerCanvasForMouseEvents() {
 
         canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
+
             public void handle(MouseEvent event) {
 
                 Seed seed;
@@ -290,7 +294,7 @@ public class ImageProcessingController implements Initializable {
         });
 
         canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
+
             public void handle(MouseEvent event) {
 
                 if (canvas.getBoundsInLocal().contains(
@@ -330,7 +334,7 @@ public class ImageProcessingController implements Initializable {
         });
 
         canvas.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
+
             public void handle(MouseEvent event) {
 
                 canvas.setOnMousePressed(null);
@@ -387,7 +391,7 @@ public class ImageProcessingController implements Initializable {
         zoomSlider.setDisable(false);
 
         zoomSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
+
             public void changed(ObservableValue<? extends Number> observable,
                                 Number oldValue, Number newValue) {
                 sliderZoomProperty.set(newValue.doubleValue());
@@ -395,7 +399,7 @@ public class ImageProcessingController implements Initializable {
         });
 
         sliderZoomProperty.addListener(new InvalidationListener() {
-            @Override
+
             public void invalidated(Observable observable) {
 
                 if (pickingSeed)
@@ -413,7 +417,7 @@ public class ImageProcessingController implements Initializable {
     private void registerScrollListener() {
 
         zoomGroup.addEventFilter(ScrollEvent.ANY, new EventHandler<ScrollEvent>() {
-            @Override
+
             public void handle(ScrollEvent event) {
 
                 if (pickingSeed)
@@ -446,7 +450,7 @@ public class ImageProcessingController implements Initializable {
         maxSlider.setDisable(false);
 
         minSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
+
             public void changed(ObservableValue<? extends Number> observable,
                                 Number oldValue, Number newValue) {
 
@@ -458,7 +462,7 @@ public class ImageProcessingController implements Initializable {
         });
 
         maxSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
+
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 
                 ImageProcessor ip = originalImage.getChannelProcessor();
@@ -621,32 +625,29 @@ public class ImageProcessingController implements Initializable {
         minSlider.setDisable(false);
         maxSlider.setDisable(false);
 
-        BufferedImage img_convertida;
-        img_convertida = this.potency();
+//        BufferedImage img_convertida;
+        this.SimpleGlobalTresholding();
     //        originalImage.getp
 
 
-                ImageProcessor ip = originalImage.getChannelProcessor();
-//                ip.filter(MAX);
-                ip.setColor(java.awt.Color.DARK_GRAY);
-
-                redrawCanvas(img_convertida);
+//                ImageProcessor ip = originalImage.getChannelProcessor();
+////                ip.filter(MAX);
+//                ip.setColor(java.awt.Color.DARK_GRAY);
+//
+//                this.showHistogramChart();
+//                originalImage.setImage(img_convertida);
+//
+//                redrawCanvas(img_convertida);
 
 
     }
 
 
 
-    public BufferedImage min() {
-
-//        Image image = this.openImage(params.get(0));
-//        this.setFilteredImageName("min");
-
-        BufferedImage img_convertida = originalImage.getBufferedImage();
+    public void min() {
 
 
         int maskWidth = Integer.parseInt("3");
-//        int maskHeight = Integer.parseInt(params.get(2));
 
         int edge = maskWidth / 2;
         int[][] newImage = new int[img_convertida.getWidth()][img_convertida.getHeight()];
@@ -681,8 +682,7 @@ public class ImageProcessingController implements Initializable {
                 img_convertida.setRGB(i, j, n.getComposedPixel());
             }
         }
-
-        return img_convertida;
+        redrawCanvas(img_convertida);
     }
 
     /*
@@ -690,9 +690,7 @@ public class ImageProcessingController implements Initializable {
      * objetos mais claros que o fundo e diminui o tamanho de objetos mais escuros
      * que o fundo em que estão inseridos.
      */
-    public BufferedImage max() {
-
-        BufferedImage img_convertida = originalImage.getBufferedImage();
+    public  void max() {
 
         int maskWidth = 3;
 
@@ -734,8 +732,7 @@ public class ImageProcessingController implements Initializable {
             }
         }
 
-//        this.storeImage();
-        return img_convertida;
+        redrawCanvas(img_convertida);
     }
 
 
@@ -745,17 +742,16 @@ public class ImageProcessingController implements Initializable {
      * Basicamente ela redistribui as intensidades da imagem de maneira que ocupem
      * todo o espectro de intensidades.
      */
-    public BufferedImage HistogramEqualization() {
+    public void HistogramEqualization() {
 
         int NUM_COLORS = 256;
 
-        BufferedImage image = originalImage.getBufferedImage();
 
 
         int[] histogram = new int[NUM_COLORS];
         int[] equalized = new int[NUM_COLORS];
         double[] probabilities = new double[NUM_COLORS];
-        int numPixels = image.getWidth()*image.getHeight();
+        int numPixels = img_convertida.getWidth()*img_convertida.getHeight();
 
         for(int x=0; x<NUM_COLORS; x++){
             histogram[x] = 0;
@@ -763,9 +759,9 @@ public class ImageProcessingController implements Initializable {
             probabilities[x] = 0.0;
         }
 
-        for(int i=0; i<image.getWidth(); i++){
-            for(int j=0; j< image.getHeight(); j++){
-                int p = image.getRGB(i, j);
+        for(int i=0; i<img_convertida.getWidth(); i++){
+            for(int j=0; j< img_convertida.getHeight(); j++){
+                int p = img_convertida.getRGB(i, j);
                 Pixel pixel = new Pixel(p);
                 histogram[pixel.gray]++;
             }
@@ -785,77 +781,136 @@ public class ImageProcessingController implements Initializable {
             //System.out.println(equalized[x]);
         }
 
-        for(int i=0; i<image.getWidth(); i++){
-            for(int j=0; j< image.getHeight(); j++){
-                int p = image.getRGB(i, j);
+        for(int i=0; i<img_convertida.getWidth(); i++){
+            for(int j=0; j< img_convertida.getHeight(); j++){
+                int p = img_convertida.getRGB(i, j);
                 Pixel pixel = new Pixel(p);
                 int index = pixel.gray;
                 int eq = equalized[index];
                 pixel.setRGB(eq, eq, eq);
-                image.setRGB(i, j, pixel.getComposedPixel());
+                img_convertida.setRGB(i, j, pixel.getComposedPixel());
             }
         }
 
-        return image;
+        redrawCanvas(img_convertida);
+
     }
 
-    public BufferedImage potency() {
+    public void potency() {
 
 
-        BufferedImage image = originalImage.getBufferedImage();
 
-
-        int c = Integer.parseInt("25");
+        int c = 25;
         double gama = 0.4;
 
-        //c = 25;
-        //gama = 0.4;
-
-        for(int x=0; x<image.getWidth(); x++){
-            for(int y=0; y<image.getHeight(); y++){
-                int pixel = image.getRGB(x, y);
+        for(int x=0; x<img_convertida.getWidth(); x++){
+            for(int y=0; y<img_convertida.getHeight(); y++){
+                int pixel = img_convertida.getRGB(x, y);
                 Pixel p = new Pixel(pixel);
                 double k = (double) p.gray;
                 //System.out.println(k);
                 int value = (int) (c * Math.pow(k, gama));
                 value = Math.min(255, Math.max(0, value));
                 p.setRGB(value, value, value);
-                image.setRGB(x, y, p.getComposedPixel());
+                img_convertida.setRGB(x, y, p.getComposedPixel());
             }
         }
 
-        return image;
+        redrawCanvas(img_convertida);
+
     }
 
 
+    /*
+     * A limiarização global simples binariza a imagem escolhendo automaticamente
+     * um limiar que irá dividir os pixels em dois grupos. Inicialmente o limiar
+     * é a intensidade média da imagem.
+     */
+
+    public void SimpleGlobalTresholding(){
+
+//        img_convertida = originalImage.getBufferedImage();
+
+        try {
+//            this.openImage(params.get(0));
+//            this.setFilteredImageName("limiarização_global");
+
+//            int[] h = Filter.getHistogram(originalImage);
+            ImageProcessor imageProcessor = originalImage.getChannelProcessor();
+
+            int[] h = imageProcessor.getHistogram();
+            int treshold = Filter.getMean(h);
+            int[] groups = new int[h.length];
+
+            boolean done = false;
+            while(!done){
+                int m1 = 0;
+                int g1 = 0;
+                int m2 = 0;
+                int g2 = 0;
+                for(int i=0; i<h.length; i++){
+                    if(i < treshold){
+                        m1 += h[i]*i;
+                        g1 += h[i];
+                    } else{
+                        m2 += h[i]*i;
+                        g2 += h[i];
+                    }
+                }
+                if(g1 != 0)
+                    m1 = m1 / g1;
+                if(g2 != 0)
+                    m2 = m2 / g2;
+
+                int newTreshold = (m1 + m2) / 2;
+                int diff = Math.abs(newTreshold - treshold);
+                if(diff < (newTreshold / 10)){
+                    done = true;
+                } else{
+                    treshold = newTreshold;
+                }
+            }
+
+            for(int i=0; i<img_convertida.getWidth(); i++){
+                for(int j=0; j<img_convertida.getHeight(); j++){
+                    Pixel n = new Pixel(img_convertida.getRGB(i, j));
+                    int v = (n.gray > treshold) ? 255 : 0;
+                    n.setRGB(v, v, v);
+                    img_convertida.setRGB(i, j, n.getComposedPixel());
+                }
+            }
+
+        } catch (Exception ex) {
+            System.out.println( ex.getMessage());
+        }
+        redrawCanvas(img_convertida);
+    }
 
 
+    public void Negativo() {
+        img_convertida = new BufferedImage(img_convertida.getColorModel(), img_convertida.copyData(null), img_convertida.getColorModel().isAlphaPremultiplied(), null);
 
 
-    public static BufferedImage Negativo(BufferedImage imagem) {
-        //Imagem resultante
-        BufferedImage ResultImage = new BufferedImage(imagem.getColorModel(), imagem.copyData(null), imagem.getColorModel().isAlphaPremultiplied(), null);
-
-
-        //pegar coluna e linha da imagem
-        int coluna = imagem.getWidth();
-        int linha = imagem.getHeight();
-        //laço para varrer a matriz de pixels da imagem
+        //pegar coluna e linha da img_convertida
+        int coluna = img_convertida.getWidth();
+        int linha = img_convertida.getHeight();
+        //laço para varrer a matriz de pixels da img_convertida
         for (int i = 0; i < coluna; i++) {
             for (int j = 0; j < linha; j++) {
                 //rgb recebe o valor RGB do pixel em questão
-                int rgb = imagem.getRGB(i, j);
+                int rgb = img_convertida.getRGB(i, j);
                 //a cor inversa é dado por 255 menos o valor da cor
                 int r = 255 - (int) ((rgb & 0x00FF0000) >>> 16);
                 int g = 255 - (int) ((rgb & 0x0000FF00) >>> 8);
                 int b = 255 - (int) (rgb & 0x000000FF);
                 java.awt.Color color = new java.awt.Color(r, g, b);
 
-                ResultImage.setRGB(i, j, color.getRGB());
+                img_convertida.setRGB(i, j, color.getRGB());
 
             }
         }
-        return ResultImage;
+
+        redrawCanvas(img_convertida);
     }
 
     public void reset(ActionEvent actionEvent) {
@@ -866,7 +921,6 @@ public class ImageProcessingController implements Initializable {
             registerListenerForWindowingSliders();
         }
 
-        originalImage = new Opener().openImage("/home/mateus/Imagens/lena.jpeg");
         ImageConverter  converter = new ImageConverter(originalImage);
         converter.convertToGray8();
 
@@ -885,5 +939,113 @@ public class ImageProcessingController implements Initializable {
 
         enableSeedButtons();
 
+    }
+
+    public void median(){
+
+        int maskWidth = 3;
+        int maskHeight = 3;
+
+        int edge = maskWidth / 2;
+        int[][] newImage = new int[img_convertida.getWidth()][img_convertida.getHeight()];
+
+        for(int i=edge; i<img_convertida.getWidth()-edge; i++){
+            for(int j=edge; j<img_convertida.getHeight()-edge; j++){
+
+                PriorityQueue<Integer> values = new PriorityQueue<Integer>();
+                int v = 0;
+                for(int x=i-edge; x<=i+edge; x++){
+                    for(int y=j-edge; y<=j+edge; y++){
+
+                        Pixel p = new Pixel(img_convertida.getRGB(x, y));
+                        v = p.gray;
+                        values.add(v);
+
+                    }
+                }
+                Integer[] valAux = new Integer[maskWidth * maskHeight];
+                valAux = values.toArray(valAux);
+                for(int k=0; k<((valAux.length+1) / 2)-1; k++){
+                    values.remove();
+                }
+
+                v = values.element();
+                newImage[i][j] = v;
+
+            }
+        }
+
+        for(int i=edge; i<img_convertida.getWidth()-edge; i++){
+            for(int j=edge; j<img_convertida.getHeight()-edge; j++){
+                Pixel n = new Pixel(img_convertida.getRGB(i, j));
+                int v = newImage[i][j];
+                n.setRGB(v, v, v);
+                img_convertida.setRGB(i, j, n.getComposedPixel());
+            }
+        }
+
+        redrawCanvas(img_convertida);
+    }
+
+    public void Sobel() {
+        //imagem resultante
+        BufferedImage ResultImage = new BufferedImage(img_convertida.getColorModel(), img_convertida.copyData(null), img_convertida.getColorModel().isAlphaPremultiplied(), null);
+        //mascaras
+        int[][] mascaraS1 = {{-1, -2, -1},
+                {0, 0, 0},
+                {1, 2, 1}};
+        int[][] mascaraS2 = {{-1, 0, 1},
+                {-2, 0, 2},
+                {-1, 0, 1}};
+
+        int r = 0, g = 0, b = 0;
+        //tamanho da imagem
+        int coluna = img_convertida.getWidth();
+        int linha = img_convertida.getHeight();
+
+        //percorre imagem
+        for (int i = 1; i + 1 < linha; i++) {
+            for (int j = 1; j + 1 < coluna; j++) {
+                //percorre mascara
+                for (int l = -1; l <= 1; l++) {
+                    for (int k = -1; k <= 1; k++) {
+                        //rgb
+                        int rgb = img_convertida.getRGB(j + k, i + l);
+                        //pegando os valores das cores primarias de cada pixel após a convolucao com a máscara
+                        r += (mascaraS1[1 + l][1 + k] * (int) ((rgb & 0x00FF0000) >>> 16));
+                        g += (mascaraS1[1 + l][1 + k] * (int) ((rgb & 0x0000FF00) >>> 8));
+                        b += (mascaraS1[1 + l][1 + k] * (int) ((rgb & 0x000000FF)));
+                    }
+
+                }
+                //arredondamento de valores
+                java.awt.Color tempColor = new java.awt.Color(Math.min(255, Math.max(0, r)), Math.min(255, Math.max(0, g)), Math.min(255, Math.max(0, b)));
+                ResultImage.setRGB(j, i, tempColor.getRGB());
+                r = g = b = 0;
+            }
+        }
+        //percorrer imagem
+        for (int i = 1; i + 1 < img_convertida.getHeight(); i++) {
+            for (int j = 1; j + 1 < img_convertida.getWidth(); j++) {
+                //Percorrer máscara
+                for (int l = -1; l <= 1; l++) {
+                    for (int k = -1; k <= 1; k++) {
+                        //RGB
+                        int rgb = img_convertida.getRGB(j + k, i + l);
+                        //pegando os valores das cores primarias de cada pixel após a convolucao com a máscara
+                        r += (mascaraS2[1 + l][1 + k] * (int) ((rgb & 0x00FF0000) >>> 16));
+                        g += (mascaraS2[1 + l][1 + k] * (int) ((rgb & 0x0000FF00) >>> 8));
+                        b += (mascaraS2[1 + l][1 + k] * (int) ((rgb & 0x000000FF)));
+                    }
+
+                }
+                //Arredondamento dos valores
+                java.awt.Color tempColor = new java.awt.Color(Math.min(255, Math.max(0, r)), Math.min(255, Math.max(0, g)), Math.min(255, Math.max(0, b)));
+                ResultImage.setRGB(j, i, tempColor.getRGB());
+                r = g = b = 0;
+            }
+        }
+        ResultImage.getSubimage(1, 1, coluna - 1, linha - 1);
+        redrawCanvas(ResultImage);
     }
 }

@@ -10,6 +10,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -17,21 +18,21 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.glyphfont.Glyph?>
 
-<VBox prefHeight="660.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.cassiano.tp_pid.ImageProcessingController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.cassiano.tp_pid.ImageProcessingController">
     <children>
         <!--<MenuBar VBox.vgrow="NEVER">-->
-            <!--<menus>-->
-                <!--<Menu mnemonicParsing="false" text="Arquivo">-->
-                    <!--<items>-->
-                        <!--<MenuItem mnemonicParsing="false" onAction="#openImageClicked" text="Abrir imagem…" />-->
-                        <!--&lt;!&ndash;<MenuItem mnemonicParsing="false" text="Sair" />&ndash;&gt;-->
-                    <!--</items>-->
-                <!--</Menu>-->
-            <!--</menus>-->
+        <!--<menus>-->
+        <!--<Menu mnemonicParsing="false" text="Arquivo">-->
+        <!--<items>-->
+        <!--<MenuItem mnemonicParsing="false" onAction="#openImageClicked" text="Abrir imagem…" />-->
+        <!--&lt;!&ndash;<MenuItem mnemonicParsing="false" text="Sair" />&ndash;&gt;-->
+        <!--</items>-->
+        <!--</Menu>-->
+        <!--</menus>-->
         <!--</MenuBar>-->
-        <ToolBar prefHeight="40.0" prefWidth="200.0">
+        <ToolBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
             <items>
-                <HBox prefHeight="30.0" prefWidth="320.0">
+                <HBox prefHeight="30.0" prefWidth="797.0">
                     <children>
                         <Button onAction="#openImageClicked">
                             <graphic>
@@ -61,80 +62,136 @@
                                 <Insets right="3.0" />
                             </HBox.margin>
                         </Button>
-                  <Button id="teste" layoutX="58.0" layoutY="10.0" onAction="#teste">
-                     <graphic>
-                        <Glyph fontFamily="FontAwesome" icon="PLUS_CIRCLE" text="teste" />
-                     </graphic>
-                  </Button>
-                  <Button id="reset" layoutX="58.0" layoutY="10.0" onAction="#reset">
-                     <graphic>
-                        <Glyph fontFamily="FontAwesome" text="reset" />
-                     </graphic>
-                  </Button>
+                        <Button id="potency" layoutX="58.0" layoutY="10.0" onAction="#potency">
+                            <graphic>
+                                <Glyph fontFamily="FontAwesome" icon="PLUS_CIRCLE" text="potency" />
+                            </graphic>
+                        </Button>
+                        <Button id="SimpleGlobalTresholding" layoutX="58.0" layoutY="10.0" onAction="#SimpleGlobalTresholding">
+                            <graphic>
+                                <Glyph fontFamily="FontAwesome" icon="PLUS_CIRCLE" text="limiar global" />
+                            </graphic>
+                        </Button>
+
+                        <Button id="HistogramEqualization" layoutX="58.0" layoutY="10.0" onAction="#HistogramEqualization">
+                            <graphic>
+                                <Glyph fontFamily="FontAwesome" text="HistogramEqualization" />
+                            </graphic>
+                        </Button>
+
+                        <Button id="negativo" layoutX="58.0" layoutY="10.0" onAction="#Negativo">
+                            <graphic>
+                                <Glyph fontFamily="FontAwesome" text="negativo" />
+                            </graphic>
+                        </Button>
+                        <Button id="reset" layoutX="58.0" layoutY="10.0" onAction="#reset" prefHeight="26.0" prefWidth="79.0">
+                            <graphic>
+                                <Glyph fontFamily="FontAwesome" prefHeight="16.0" prefWidth="68.0" text="reset" />
+                            </graphic>
+                        </Button>
+
+
+                        <!--<Button id="Negativo" layoutX="58.0" layoutY="10.0" onAction="#Negativo">-->
+                            <!--<graphic>-->
+                                <!--<Glyph fontFamily="FontAwesome" text="reset" />-->
+                            <!--</graphic>-->
+                        <!--</Button>-->
 
 
                     </children>
                 </HBox>
             </items></ToolBar>
-        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+        <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS">
             <children>
-                <AnchorPane id="AnchorPane" fx:id="rootPane" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="220.0" AnchorPane.topAnchor="10.0">
-                    <children>
-                        <Slider fx:id="zoomSlider" blockIncrement="1.0" disable="true" max="200.0" min="1.0" value="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" />
-                        <Group id="Group" layoutX="0.0" layoutY="0.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"> <!-- onScroll="#scrolling">-->
+                <SplitPane dividerPositions="0.5, 0.5" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="545.0" prefWidth="980.0">
+                    <items>
+                        <ScrollPane fx:id="scrollPaneImageOriginal" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="333.0">
+                            <content>
+                                <Group id="Group" fx:id="rootGroupOriginal" />
+                            </content>
+                        </ScrollPane>
+                        <AnchorPane id="AnchorPane" fx:id="rootPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="220.0" AnchorPane.topAnchor="10.0">
                             <children>
-                                <ScrollPane fx:id="scrollPaneImage" fitToHeight="true" fitToWidth="true" layoutX="0.0" layoutY="0.0" prefHeight="543.0" prefWidth="548.0">
+                                <Slider fx:id="zoomSlider" blockIncrement="1.0" disable="true" max="200.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" min="1.0" minHeight="-Infinity" minWidth="-Infinity" value="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" />
+                                <ScrollPane fx:id="scrollPaneImage" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="333.0">
                                     <content>
                                         <Group id="Group" fx:id="rootGroup">
                                         </Group>
                                     </content>
                                 </ScrollPane>
                             </children>
-                        </Group>
-                    </children>
-                </AnchorPane>
-                <VBox AnchorPane.leftAnchor="575.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-                    <children>
-                        <Label text="Histograma" />
-                        <BarChart fx:id="histogramChart" animated="false" barGap="0.0" categoryGap="1.0" legendVisible="false" prefHeight="36.0" prefWidth="51.0">
-                            <xAxis>
-                                <CategoryAxis side="BOTTOM" />
-                            </xAxis>
-                            <yAxis>
-                                <NumberAxis side="LEFT" />
-                            </yAxis>
-                        </BarChart>
-                        <Label text="Nível máximo" />
-                        <Slider fx:id="maxSlider" blockIncrement="1.0" disable="true" max="255.0" prefHeight="16.0" prefWidth="176.0" value="255.0" />
-                        <Label text="Nível mínimo" />
-                        <ImageView fx:id="imageHistogram" fitWidth="215.0" pickOnBounds="true" preserveRatio="true" />
-                        <Slider fx:id="minSlider" blockIncrement="1.0" disable="true" max="255.0" />
+                        </AnchorPane>
+                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="333.0">
+                            <children>
+                                <Label text="Histograma" />
+                                <BarChart fx:id="histogramChart" animated="false" barGap="0.0" categoryGap="1.0" legendVisible="false" prefHeight="36.0">
+                                    <xAxis>
+                                        <CategoryAxis side="BOTTOM" />
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis side="LEFT" />
+                                    </yAxis>
+                                </BarChart>
+                                <Label text="Nível máximo" />
+                                <Slider fx:id="maxSlider" blockIncrement="1.0" disable="true" max="255.0" value="255.0" />
+                                <Label text="Nível mínimo" />
+                                <ImageView fx:id="imageHistogram" fitWidth="215.0" pickOnBounds="true" preserveRatio="true" />
+                                <Slider fx:id="minSlider" blockIncrement="1.0" disable="true" max="255.0" />
 
-                        <Button id="internalSeedButton" fx:id="inSeed" disable="true" mnemonicParsing="false" onAction="#inSeedClicked" prefHeight="26.0" prefWidth="223.0" text="Selecionar semente interna">
-                            <VBox.margin>
-                                <Insets bottom="5.0" top="10.0" />
-                            </VBox.margin></Button>
+                                <Button id="internalSeedButton" fx:id="inSeed" disable="true" mnemonicParsing="false" onAction="#inSeedClicked" prefHeight="26.0" prefWidth="315.0" text="Selecionar semente interna">
+                                    <VBox.margin>
+                                        <Insets bottom="5.0" top="10.0" />
+                                    </VBox.margin>
+                                </Button>
 
-                        <Button id="externalSeedButton" fx:id="outSeed" disable="true" mnemonicParsing="false" onAction="#outSeedClicked" prefHeight="26.0" prefWidth="253.0" text="Selecionar semente externa">
-                            <VBox.margin>
-                                <Insets bottom="5.0" top="10.0" />
-                            </VBox.margin></Button>
+                                <Button id="externalSeedButton" fx:id="outSeed" disable="true" mnemonicParsing="false" onAction="#outSeedClicked" prefHeight="26.0" prefWidth="315.0" text="Selecionar semente externa">
+                                    <VBox.margin>
+                                        <Insets bottom="5.0" top="10.0" />
+                                    </VBox.margin>
+                                </Button>
 
-                        <Button fx:id="clearSeedsButton" disable="true" mnemonicParsing="false" onAction="#clearSeeds" prefHeight="26.0" prefWidth="263.0" text="Limpar sementes">
-                            <VBox.margin>
-                                <Insets top="10.0" />
-                            </VBox.margin></Button>
+                                <Button fx:id="clearSeedsButton" disable="true" mnemonicParsing="false" onAction="#clearSeeds" prefHeight="26.0" prefWidth="315.0" text="Limpar sementes">
+                                    <VBox.margin>
+                                        <Insets top="10.0" />
+                                    </VBox.margin>
+                                </Button>
 
-                        <Button fx:id="runRegionGrowingButton" disable="true" mnemonicParsing="false" onAction="#runRegionGrowing" prefHeight="26.0" prefWidth="263.0" text="Executar">
-                            <VBox.margin>
-                                <Insets top="10.0" />
-                            </VBox.margin></Button>
+                                <Button fx:id="runRegionGrowingButton" disable="true" mnemonicParsing="false" onAction="#runRegionGrowing" prefHeight="26.0" prefWidth="315.0" text="Executar">
+                                    <VBox.margin>
+                                        <Insets top="10.0" />
+                                    </VBox.margin>
+                                </Button>
+                                <Button id="max" onAction="#max" prefHeight="26.0" prefWidth="315.0" text="max">
+                                    <VBox.margin>
+                                        <Insets top="10.0" />
+                                    </VBox.margin>
+                                </Button>
+                                <Button id="min" onAction="#min" prefHeight="26.0" prefWidth="315.0" text="min">
+                                    <VBox.margin>
+                                        <Insets top="10.0" />
+                                    </VBox.margin>
+                                </Button>
 
-                    </children>
-                    <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </padding>
-                </VBox>
+                                <Button id="median" onAction="#median" prefHeight="26.0" prefWidth="315.0" text="median">
+                                    <VBox.margin>
+                                        <Insets top="10.0" />
+                                    </VBox.margin>
+                                </Button>
+
+                                <Button id="Sobel" onAction="#Sobel" prefHeight="26.0" prefWidth="315.0" text="Sobel">
+                                    <VBox.margin>
+                                        <Insets top="10.0" />
+                                    </VBox.margin>
+                                </Button>
+
+
+                            </children>
+                            <padding>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </padding>
+                        </VBox>
+                    </items>
+                </SplitPane>
             </children>
         </AnchorPane>
     </children>
