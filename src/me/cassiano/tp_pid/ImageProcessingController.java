@@ -1,9 +1,6 @@
 package me.cassiano.tp_pid;
 
-import ij.ImageJ;
 import ij.ImagePlus;
-import ij.gui.OvalRoi;
-import ij.gui.Roi;
 import ij.gui.ShapeRoi;
 import ij.io.Opener;
 import ij.process.ImageConverter;
@@ -25,31 +22,23 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
-//import java.awt.Color;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.ResourceBundle;
 
-import static ij.process.ImageProcessor.FIND_EDGES;
-import static ij.process.ImageProcessor.MAX;
-import static ij.process.ImageProcessor.MIN;
+//import java.awt.Color;
 
 public class ImageProcessingController implements Initializable {
 
@@ -68,6 +57,12 @@ public class ImageProcessingController implements Initializable {
 
     @FXML
     private Group rootGroup;
+
+    @FXML
+    TextArea textArea;
+
+    @FXML
+    private Group rootGroupOriginal;
 
     @FXML
     private Button clearSeedsButton;
@@ -124,6 +119,14 @@ public class ImageProcessingController implements Initializable {
         }
 
         originalImage = new Opener().openImage("/home/mateus/Imagens/lena.jpeg");
+
+        Image currentImage = SwingFXUtils.
+                toFXImage(originalImage.getBufferedImage(), null);
+        ImageView originalImageView = new ImageView();
+        originalImageView.setImage(currentImage);
+        rootGroupOriginal.getChildren().clear();
+        rootGroupOriginal.getChildren().add(originalImageView);
+
         ImageConverter  converter = new ImageConverter(originalImage);
         img_convertida = originalImage.getBufferedImage();
         converter.convertToGray8();
@@ -160,6 +163,14 @@ public class ImageProcessingController implements Initializable {
             }
 
             originalImage = new Opener().openImage(file.getPath());
+
+            Image currentImage = SwingFXUtils.
+                    toFXImage(originalImage.getBufferedImage(), null);
+            ImageView originalImageView = new ImageView();
+            originalImageView.setImage(currentImage);
+            rootGroupOriginal.getChildren().clear();
+            rootGroupOriginal.getChildren().add(originalImageView);
+
             ImageConverter converter = new ImageConverter(originalImage);
             img_convertida = originalImage.getBufferedImage();
             converter.convertToGray8();
@@ -184,7 +195,12 @@ public class ImageProcessingController implements Initializable {
 
     private void showHistogramChart() {
 
-        ImageProcessor imageProcessor = originalImage.getChannelProcessor();
+        ImagePlus iplus = new ImagePlus();
+
+        iplus.setImage(img_convertida);
+
+        ImageProcessor imageProcessor = iplus.getChannelProcessor();
+
 
         int[] histogram = imageProcessor.getHistogram();
 
@@ -513,8 +529,9 @@ public class ImageProcessingController implements Initializable {
 
 
     public void clearSeeds(ActionEvent actionEvent) {
-
-        getSeedImage(internalSeed).show();
+        if (internalSeed != null) {
+            getSeedImage(internalSeed).show();
+        }
         clearPoints();
 
     }
@@ -683,6 +700,8 @@ public class ImageProcessingController implements Initializable {
             }
         }
         redrawCanvas(img_convertida);
+
+        textArea.appendText("Min\n");
     }
 
     /*
@@ -732,7 +751,10 @@ public class ImageProcessingController implements Initializable {
             }
         }
 
+        this.showHistogramChart();
         redrawCanvas(img_convertida);
+
+        textArea.appendText("Max\n");
     }
 
 
@@ -791,9 +813,10 @@ public class ImageProcessingController implements Initializable {
                 img_convertida.setRGB(i, j, pixel.getComposedPixel());
             }
         }
-
+        this.showHistogramChart();
         redrawCanvas(img_convertida);
 
+        textArea.appendText("HistogramEqualization\n");
     }
 
     public void potency() {
@@ -808,7 +831,6 @@ public class ImageProcessingController implements Initializable {
                 int pixel = img_convertida.getRGB(x, y);
                 Pixel p = new Pixel(pixel);
                 double k = (double) p.gray;
-                //System.out.println(k);
                 int value = (int) (c * Math.pow(k, gama));
                 value = Math.min(255, Math.max(0, value));
                 p.setRGB(value, value, value);
@@ -816,8 +838,10 @@ public class ImageProcessingController implements Initializable {
             }
         }
 
+        this.showHistogramChart();
         redrawCanvas(img_convertida);
 
+        textArea.appendText("Potency\n");
     }
 
 
@@ -829,13 +853,9 @@ public class ImageProcessingController implements Initializable {
 
     public void SimpleGlobalTresholding(){
 
-//        img_convertida = originalImage.getBufferedImage();
-
         try {
-//            this.openImage(params.get(0));
 //            this.setFilteredImageName("limiarização_global");
 
-//            int[] h = Filter.getHistogram(originalImage);
             ImageProcessor imageProcessor = originalImage.getChannelProcessor();
 
             int[] h = imageProcessor.getHistogram();
@@ -883,7 +903,11 @@ public class ImageProcessingController implements Initializable {
         } catch (Exception ex) {
             System.out.println( ex.getMessage());
         }
+
+        this.showHistogramChart();
         redrawCanvas(img_convertida);
+
+        textArea.appendText("SimpleGlobalTresholding\n");
     }
 
 
@@ -911,6 +935,8 @@ public class ImageProcessingController implements Initializable {
         }
 
         redrawCanvas(img_convertida);
+
+        textArea.appendText("Negativo\n");
     }
 
     public void reset(ActionEvent actionEvent) {
@@ -939,6 +965,7 @@ public class ImageProcessingController implements Initializable {
 
         enableSeedButtons();
 
+        textArea.clear();
     }
 
     public void median(){
@@ -985,6 +1012,8 @@ public class ImageProcessingController implements Initializable {
         }
 
         redrawCanvas(img_convertida);
+
+        textArea.appendText("Median\n");
     }
 
     public void Sobel() {
@@ -1047,5 +1076,7 @@ public class ImageProcessingController implements Initializable {
         }
         ResultImage.getSubimage(1, 1, coluna - 1, linha - 1);
         redrawCanvas(ResultImage);
+
+        textArea.appendText("Sobel\n");
     }
 }

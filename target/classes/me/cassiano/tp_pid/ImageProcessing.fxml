@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import org.controlsfx.glyphfont.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.chart.BarChart?>
@@ -18,7 +29,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.glyphfont.Glyph?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.cassiano.tp_pid.ImageProcessingController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.cassiano.tp_pid.ImageProcessingController">
     <children>
         <!--<MenuBar VBox.vgrow="NEVER">-->
         <!--<menus>-->
@@ -84,9 +95,15 @@
                                 <Glyph fontFamily="FontAwesome" text="negativo" />
                             </graphic>
                         </Button>
+                          <Button id="max" onAction="#max" text="max" />
+                          <Button id="min" onAction="#min" text="min" />
+
+                          <Button id="median" onAction="#median" text="median" />
+
+                          <Button id="Sobel" onAction="#Sobel" text="Sobel" />
                         <Button id="reset" layoutX="58.0" layoutY="10.0" onAction="#reset" prefHeight="26.0" prefWidth="79.0">
                             <graphic>
-                                <Glyph fontFamily="FontAwesome" prefHeight="16.0" prefWidth="68.0" text="reset" />
+                                <Glyph fontFamily="FontAwesome" text="reset" />
                             </graphic>
                         </Button>
 
@@ -161,28 +178,19 @@
                                         <Insets top="10.0" />
                                     </VBox.margin>
                                 </Button>
-                                <Button id="max" onAction="#max" prefHeight="26.0" prefWidth="315.0" text="max">
-                                    <VBox.margin>
-                                        <Insets top="10.0" />
-                                    </VBox.margin>
-                                </Button>
-                                <Button id="min" onAction="#min" prefHeight="26.0" prefWidth="315.0" text="min">
-                                    <VBox.margin>
-                                        <Insets top="10.0" />
-                                    </VBox.margin>
-                                </Button>
-
-                                <Button id="median" onAction="#median" prefHeight="26.0" prefWidth="315.0" text="median">
-                                    <VBox.margin>
-                                        <Insets top="10.0" />
-                                    </VBox.margin>
-                                </Button>
-
-                                <Button id="Sobel" onAction="#Sobel" prefHeight="26.0" prefWidth="315.0" text="Sobel">
-                                    <VBox.margin>
-                                        <Insets top="10.0" />
-                                    </VBox.margin>
-                                </Button>
+                        <ScrollPane prefHeight="150.0" prefWidth="323.0">
+                          <content>
+                            <AnchorPane minHeight="-Infinity" minWidth="-Infinity">
+                                 <children>
+                                    <TextArea fx:id="textArea" editable="false" style="-fx-text-fill: #000000;" styleClass="model-text-area" text="Modification History:&#10;&#10;">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </TextArea>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </ScrollPane>
 
 
                             </children>
