@@ -644,17 +644,6 @@ public class ImageProcessingController implements Initializable {
 
 //        BufferedImage img_convertida;
         this.SimpleGlobalTresholding();
-    //        originalImage.getp
-
-
-//                ImageProcessor ip = originalImage.getChannelProcessor();
-////                ip.filter(MAX);
-//                ip.setColor(java.awt.Color.DARK_GRAY);
-//
-//                this.showHistogramChart();
-//                originalImage.setImage(img_convertida);
-//
-//                redrawCanvas(img_convertida);
 
 
     }
@@ -934,6 +923,8 @@ public class ImageProcessingController implements Initializable {
             }
         }
 
+        this.showHistogramChart();
+
         redrawCanvas(img_convertida);
 
         textArea.appendText("Negativo\n");
@@ -955,6 +946,8 @@ public class ImageProcessingController implements Initializable {
             zoomGroup.getChildren().add(canvas);
         }
 
+        img_convertida = originalImage.getBufferedImage();
+        
         clearPoints();
 
         resetWindowingSliders();
@@ -1011,6 +1004,8 @@ public class ImageProcessingController implements Initializable {
             }
         }
 
+
+        this.showHistogramChart();
         redrawCanvas(img_convertida);
 
         textArea.appendText("Median\n");
@@ -1075,7 +1070,10 @@ public class ImageProcessingController implements Initializable {
             }
         }
         ResultImage.getSubimage(1, 1, coluna - 1, linha - 1);
+        img_convertida= ResultImage;
+        this.showHistogramChart();
         redrawCanvas(ResultImage);
+
 
         textArea.appendText("Sobel\n");
     }
