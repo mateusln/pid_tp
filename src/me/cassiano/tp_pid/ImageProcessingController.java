@@ -50,9 +50,6 @@ public class ImageProcessingController implements Initializable {
     private Button inSeed;
 
     @FXML
-    private Button outSeed;
-
-    @FXML
     private Button runRegionGrowingButton;
 
     @FXML
@@ -64,8 +61,6 @@ public class ImageProcessingController implements Initializable {
     @FXML
     private Group rootGroupOriginal;
 
-    @FXML
-    private Button clearSeedsButton;
 
     @FXML
     private Slider minSlider;
@@ -104,6 +99,7 @@ public class ImageProcessingController implements Initializable {
         seedShape = Seed.Shape.Circle;
         zoomGroup = new Group();
         zoomGroup.setMouseTransparent(false);
+        runRegionGrowingButton.setCancelButton(true);
         rootGroup.getChildren().add(zoomGroup);
         this.imagemPadrao(); // já abre o programa com uma img carregada p/ acelerar o teste
 
@@ -370,8 +366,8 @@ public class ImageProcessingController implements Initializable {
 
         zoomSlider.setDisable(true);
         inSeed.setDisable(true);
-        outSeed.setDisable(true);
-        clearSeedsButton.setDisable(true);
+//        outSeed.setDisable(true);
+//        clearSeedsButton.setDisable(true);
     }
 
     private void enableSeedButtons() {
@@ -379,13 +375,13 @@ public class ImageProcessingController implements Initializable {
 
         zoomSlider.setDisable(false);
         inSeed.setDisable(false);
-        outSeed.setDisable(false);
-        clearSeedsButton.setDisable(false);
-        runRegionGrowingButton.setDisable(false);
+
 
     }
 
     public void inSeedClicked(ActionEvent actionEvent) {
+
+        runRegionGrowingButton.setDisable(false);
 
         seedBeingPicked = Seed.Type.Internal;
 
@@ -536,40 +532,28 @@ public class ImageProcessingController implements Initializable {
 
     }
 
-    private void extractFeatures() {
+    private void extractFeatures() { //extrai detalhes de textura
 
         GLCMtexture internalSeedGLCM = new GLCMtexture();
         internalSeedGLCM.calcGLCM(
                 getSeedImage(internalSeed).getChannelProcessor());
 
-        GLCMtexture externalSeedGLCM = new GLCMtexture();
-        externalSeedGLCM.calcGLCM(
-                getSeedImage(internalSeed).getChannelProcessor());
+
+        textArea.appendText("\n\nDetalhes");
+        textArea.appendText("\nEntropia : " + internalSeedGLCM.getEntropy());
+        textArea.appendText("\nHomogeniedade : " + internalSeedGLCM.getHomogeneity());
+        textArea.appendText("\nEnergia: " + internalSeedGLCM.getEnergy());
+        textArea.appendText("\nContraste: " + internalSeedGLCM.getContrast());
+        textArea.appendText("\nCorrelação: " + internalSeedGLCM.getCorrelation());
+
+        runRegionGrowingButton.setDisable(true);
 
 
-        System.out.println("Semente interna");
-        System.out.println("Entropia : " + internalSeedGLCM.getEntropy());
-        System.out.println("Homogeniedade : " + internalSeedGLCM.getHomogeneity());
-        System.out.println("Energia: " + internalSeedGLCM.getEnergy());
-        System.out.println("Contraste: " + internalSeedGLCM.getContrast());
-        System.out.println("Correlação: " + internalSeedGLCM.getCorrelation());
-
-        System.out.println("");
-
-        System.out.println("Semente interna");
-        System.out.println("Entropia : " + externalSeedGLCM.getEntropy());
-        System.out.println("Homogeniedade : " + externalSeedGLCM.getHomogeneity());
-        System.out.println("Energia: " + externalSeedGLCM.getEnergy());
-        System.out.println("Contraste: " + externalSeedGLCM.getContrast());
-        System.out.println("Correlação: " + externalSeedGLCM.getCorrelation());
     }
 
     public void runRegionGrowing(ActionEvent actionEvent) {
 
-        // run this on a new thread
-        // ImagePlus internal = getSeedImage(internal_seed);
-        // ImagePlus external = getSeedImage(external_seed);
-        // call_to_method(originalImage, internal, external);
+        this.extractFeatures();
 
     }
 
@@ -947,7 +931,7 @@ public class ImageProcessingController implements Initializable {
         }
 
         img_convertida = originalImage.getBufferedImage();
-        
+
         clearPoints();
 
         resetWindowingSliders();
