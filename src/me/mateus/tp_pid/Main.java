@@ -1,4 +1,4 @@
-package me.cassiano.tp_pid;
+package me.mateus.tp_pid;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +13,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("ImageProcessing.fxml"));
 
-        primaryStage.setTitle("Trabalho Prático - PID");
+        primaryStage.setTitle("PSE");
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
         primaryStage.show();

@@ -1,4 +1,4 @@
-package me.cassiano.tp_pid;
+package me.mateus.tp_pid;
 
 import ij.ImagePlus;
 import ij.gui.ShapeRoi;
@@ -101,7 +101,7 @@ public class ImageProcessingController implements Initializable {
         zoomGroup.setMouseTransparent(false);
         runRegionGrowingButton.setCancelButton(true);
         rootGroup.getChildren().add(zoomGroup);
-        this.imagemPadrao(); // já abre o programa com uma img carregada p/ acelerar o teste
+//        this.imagemPadrao(); // já abre o programa com uma img carregada p/ acelerar o teste
 
     }
 
@@ -110,8 +110,8 @@ public class ImageProcessingController implements Initializable {
 
         if (originalImage == null) {
             registerScrollListener();
-            registerListenerForZoomSlider();
-            registerListenerForWindowingSliders();
+//            registerListenerForZoomSlider();
+//            registerListenerForWindowingSliders();
         }
 
         originalImage = new Opener().openImage("/home/mateus/Imagens/lena.jpeg");
@@ -134,7 +134,7 @@ public class ImageProcessingController implements Initializable {
 
         clearPoints();
 
-        resetWindowingSliders();
+//        resetWindowingSliders();
 
         redrawCanvas();
 
@@ -154,8 +154,8 @@ public class ImageProcessingController implements Initializable {
 
             if (originalImage == null) {
                 registerScrollListener();
-                registerListenerForZoomSlider();
-                registerListenerForWindowingSliders();
+//                registerListenerForZoomSlider();
+//                registerListenerForWindowingSliders();
             }
 
             originalImage = new Opener().openImage(file.getPath());
@@ -178,7 +178,7 @@ public class ImageProcessingController implements Initializable {
 
             clearPoints();
 
-            resetWindowingSliders();
+//            resetWindowingSliders();
 
             redrawCanvas();
 
@@ -366,8 +366,6 @@ public class ImageProcessingController implements Initializable {
 
         zoomSlider.setDisable(true);
         inSeed.setDisable(true);
-//        outSeed.setDisable(true);
-//        clearSeedsButton.setDisable(true);
     }
 
     private void enableSeedButtons() {
@@ -388,13 +386,6 @@ public class ImageProcessingController implements Initializable {
         disableSeedButtons();
         registerCanvasForMouseEvents();
 
-    }
-
-    public void outSeedClicked(ActionEvent actionEvent) {
-
-        seedBeingPicked = Seed.Type.External;
-        disableSeedButtons();
-        registerCanvasForMouseEvents();
     }
 
 
@@ -456,42 +447,39 @@ public class ImageProcessingController implements Initializable {
 
     }
 
-    private void registerListenerForWindowingSliders() {
+//    private void registerListenerForWindowingSliders() {
+//
+////        minSlider.setDisable(false);
+////        maxSlider.setDisable(false);
+//
+//        minSlider.valueProperty().addListener(new ChangeListener<Number>() {
+//
+//            public void changed(ObservableValue<? extends Number> observable,
+//                                Number oldValue, Number newValue) {
+//
+//                ImageProcessor ip = originalImage.getChannelProcessor();
+//                ip.setMinAndMax(newValue.doubleValue(), maxSlider.getValue());
+//                img_convertida = ip.getBufferedImage();
+//                showHistogramChart();
+//                redrawCanvas();
+//
+//            }
+//        });
+//
+//        maxSlider.valueProperty().addListener(new ChangeListener<Number>() {
+//
+//            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+//
+//                ImageProcessor ip = originalImage.getChannelProcessor();
+//                ip.setMinAndMax(minSlider.getValue(), newValue.doubleValue());
+//                redrawCanvas();
+//
+//            }
+//        });
+//
+//    }
 
-        minSlider.setDisable(false);
-        maxSlider.setDisable(false);
 
-        minSlider.valueProperty().addListener(new ChangeListener<Number>() {
-
-            public void changed(ObservableValue<? extends Number> observable,
-                                Number oldValue, Number newValue) {
-
-                ImageProcessor ip = originalImage.getChannelProcessor();
-                ip.setMinAndMax(newValue.doubleValue(), maxSlider.getValue());
-                redrawCanvas();
-
-            }
-        });
-
-        maxSlider.valueProperty().addListener(new ChangeListener<Number>() {
-
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-
-                ImageProcessor ip = originalImage.getChannelProcessor();
-                ip.setMinAndMax(minSlider.getValue(), newValue.doubleValue());
-                redrawCanvas();
-
-            }
-        });
-
-    }
-
-    private void resetWindowingSliders() {
-
-        minSlider.adjustValue(0);
-        maxSlider.adjustValue(255);
-
-    }
 
     private void redrawCanvas() {
 
@@ -524,14 +512,6 @@ public class ImageProcessingController implements Initializable {
     }
 
 
-    public void clearSeeds(ActionEvent actionEvent) {
-        if (internalSeed != null) {
-            getSeedImage(internalSeed).show();
-        }
-        clearPoints();
-
-    }
-
     private void extractFeatures() { //extrai detalhes de textura
 
         GLCMtexture internalSeedGLCM = new GLCMtexture();
@@ -544,7 +524,7 @@ public class ImageProcessingController implements Initializable {
         textArea.appendText("\nHomogeniedade : " + internalSeedGLCM.getHomogeneity());
         textArea.appendText("\nEnergia: " + internalSeedGLCM.getEnergy());
         textArea.appendText("\nContraste: " + internalSeedGLCM.getContrast());
-        textArea.appendText("\nCorrelação: " + internalSeedGLCM.getCorrelation());
+
 
         runRegionGrowingButton.setDisable(true);
 
@@ -557,12 +537,6 @@ public class ImageProcessingController implements Initializable {
 
     }
 
-    private void onRegionGrowingComplete(ImagePlus imagePlus) {
-
-        // originalImage = imagePlus;
-        // redraw_canvas();
-
-    }
 
 
     private ImagePlus getSeedImage(Seed seed) {
@@ -672,6 +646,7 @@ public class ImageProcessingController implements Initializable {
                 img_convertida.setRGB(i, j, n.getComposedPixel());
             }
         }
+        this.showHistogramChart();
         redrawCanvas(img_convertida);
 
         textArea.appendText("Min\n");
@@ -789,7 +764,7 @@ public class ImageProcessingController implements Initializable {
         this.showHistogramChart();
         redrawCanvas(img_convertida);
 
-        textArea.appendText("HistogramEqualization\n");
+        textArea.appendText("Equalizacao de histograma\n");
     }
 
     public void potency() {
@@ -814,7 +789,7 @@ public class ImageProcessingController implements Initializable {
         this.showHistogramChart();
         redrawCanvas(img_convertida);
 
-        textArea.appendText("Potency\n");
+        textArea.appendText("Potencia\n");
     }
 
 
@@ -880,7 +855,7 @@ public class ImageProcessingController implements Initializable {
         this.showHistogramChart();
         redrawCanvas(img_convertida);
 
-        textArea.appendText("SimpleGlobalTresholding\n");
+        textArea.appendText("Limiar global simples\n");
     }
 
 
@@ -918,8 +893,8 @@ public class ImageProcessingController implements Initializable {
 
         if (originalImage == null) {
             registerScrollListener();
-            registerListenerForZoomSlider();
-            registerListenerForWindowingSliders();
+//            registerListenerForZoomSlider();
+//            registerListenerForWindowingSliders();
         }
 
         ImageConverter  converter = new ImageConverter(originalImage);
@@ -934,7 +909,6 @@ public class ImageProcessingController implements Initializable {
 
         clearPoints();
 
-        resetWindowingSliders();
 
         redrawCanvas();
 
@@ -992,7 +966,7 @@ public class ImageProcessingController implements Initializable {
         this.showHistogramChart();
         redrawCanvas(img_convertida);
 
-        textArea.appendText("Median\n");
+        textArea.appendText("Mediana\n");
     }
 
     public void Sobel() {

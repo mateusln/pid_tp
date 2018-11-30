@@ -7,33 +7,20 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.glyphfont.Glyph?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.cassiano.tp_pid.ImageProcessingController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.mateus.tp_pid.ImageProcessingController">
     <children>
-        <!--<MenuBar VBox.vgrow="NEVER">-->
-        <!--<menus>-->
-        <!--<Menu mnemonicParsing="false" text="Arquivo">-->
-        <!--<items>-->
-        <!--<MenuItem mnemonicParsing="false" onAction="#openImageClicked" text="Abrir imagem…" />-->
-        <!--&lt;!&ndash;<MenuItem mnemonicParsing="false" text="Sair" />&ndash;&gt;-->
-        <!--</items>-->
-        <!--</Menu>-->
-        <!--</menus>-->
-        <!--</MenuBar>-->
+
         <ToolBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
             <items>
                 <HBox>
@@ -50,7 +37,7 @@
                         <Separator orientation="VERTICAL" />
                         <Button id="potency" layoutX="58.0" layoutY="10.0" onAction="#potency">
                             <graphic>
-                                <Glyph fontFamily="FontAwesome" icon="PLUS_CIRCLE" text="potency">
+                                <Glyph fontFamily="FontAwesome" icon="PLUS_CIRCLE" text="Potencia">
                            <padding>
                               <Insets right="4.0" />
                            </padding></Glyph>
@@ -58,27 +45,26 @@
                         </Button>
                         <Button id="SimpleGlobalTresholding" layoutX="58.0" layoutY="10.0" onAction="#SimpleGlobalTresholding">
                             <graphic>
-                                <Glyph fontFamily="FontAwesome" icon="PLUS_CIRCLE" text="limiar global" />
+                                <Glyph fontFamily="FontAwesome" icon="PLUS_CIRCLE" text="Limiar Global Simples" />
                             </graphic>
                         </Button>
 
                         <Button id="HistogramEqualization" layoutX="58.0" layoutY="10.0" onAction="#HistogramEqualization">
                             <graphic>
-                                <Glyph fontFamily="FontAwesome" text="HistogramEqualization" />
+                                <Glyph fontFamily="FontAwesome" text="Equalizacao de Histograma" />
                             </graphic>
                         </Button>
 
                         <Button id="negativo" layoutX="58.0" layoutY="10.0" onAction="#Negativo">
                             <graphic>
-                                <Glyph fontFamily="FontAwesome" text="negativo" />
+                                <Glyph fontFamily="FontAwesome" text="Negativo" />
                             </graphic>
                         </Button>
-                          <Button id="max" onAction="#max" text="max" />
-                          <Button id="min" onAction="#min" text="min" />
-
-                          <Button id="median" onAction="#median" text="median" />
-
+                          <Button id="max" onAction="#max" text="Max" />
+                          <Button id="min" onAction="#min" text="Min" />
+                          <Button id="median" onAction="#median" text="Mediana" />
                           <Button id="Sobel" onAction="#Sobel" text="Sobel" />
+                  <Separator layoutX="31.0" layoutY="10.0" orientation="VERTICAL" />
                         <Button id="reset" layoutX="58.0" layoutY="10.0" onAction="#reset" prefHeight="26.0" prefWidth="79.0">
                             <graphic>
                                 <Glyph fontFamily="FontAwesome" text="reset" />
@@ -127,11 +113,11 @@
                                         <NumberAxis side="LEFT" />
                                     </yAxis>
                                 </BarChart>
-                                <Label text="Nível máximo" />
-                                <Slider fx:id="maxSlider" blockIncrement="1.0" disable="true" max="255.0" value="255.0" />
-                                <Label text="Nível mínimo" />
-                                <ImageView fx:id="imageHistogram" fitWidth="215.0" pickOnBounds="true" preserveRatio="true" />
-                                <Slider fx:id="minSlider" blockIncrement="1.0" disable="true" max="255.0" />
+                                <!--<Label text="Nível máximo" />-->
+                                <!--<Slider fx:id="maxSlider" blockIncrement="1.0" disable="true" max="255.0" value="255.0" />-->
+                                <!--<Label text="Nível mínimo" />-->
+                                <!--<ImageView fx:id="imageHistogram" fitWidth="215.0" pickOnBounds="true" preserveRatio="true" />-->
+                                <!--<Slider fx:id="minSlider" blockIncrement="1.0" disable="true" max="255.0" />-->
 
                                 <Button id="internalSeedButton" fx:id="inSeed" disable="true" mnemonicParsing="false" onAction="#inSeedClicked" prefHeight="26.0" prefWidth="315.0" text="Selecionar textura">
                                     <VBox.margin>
@@ -145,11 +131,11 @@
                                         <Insets top="10.0" />
                                     </VBox.margin>
                                 </Button>
-                        <ScrollPane prefHeight="150.0" prefWidth="323.0">
+                        <ScrollPane prefHeight="282.0" prefWidth="323.0">
                           <content>
                             <AnchorPane minHeight="-Infinity" minWidth="-Infinity">
                                  <children>
-                                    <TextArea fx:id="textArea" editable="false" style="-fx-text-fill: #000000;" styleClass="model-text-area" text="Modification History:&#10;&#10;">
+                                    <TextArea fx:id="textArea" editable="false" prefHeight="275.0" prefWidth="549.0" style="-fx-text-fill: #000000;" styleClass="model-text-area" text="Modification History:&#10;&#10;">
                                        <opaqueInsets>
                                           <Insets />
                                        </opaqueInsets>
@@ -169,24 +155,5 @@
                 </SplitPane>
             </children>
         </AnchorPane>
-      <MenuBar>
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
     </children>
 </VBox>
